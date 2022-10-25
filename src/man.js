@@ -1,48 +1,53 @@
-const canvas = document.getElementById('game-field');
-const context = canvas.getContext('2d');
+import { MapOptions } from './dimension';
 
 export class Man {
-    constructor(width = 75, height = 75, startX = 7, startY = 5) {
-        this._height = height;
-        this._width = width;
-        this._x = convertBoxInPixel(startX, width);
-        this._y = convertBoxInPixel(startY, width);
-        drawRect(this._x, this._y, this._width, this._height);
+    constructor(startX = 7, startY = 5) {
+        this._x = startX;
+        this._y = startY;
     }
 
-    moveToLeft() {
-        clearRect(this._x, this._y, this._width, this._height);
-        this._x -= convertBoxInPixel(1, this._width);
-        drawRect(this._x, this._y, this._width, this._height);
+    get x() {
+        return this._x;
     }
 
-    moveToRight() {
-        clearRect(this._x, this._y, this._width, this._height);
-        this._x += convertBoxInPixel(1, this._width);
-        drawRect(this._x, this._y, this._width, this._height);
+    get y() {
+        return this._y;
     }
 
-    moveToTop() {
-        clearRect(this._x, this._y, this._width, this._height);
-        this._y -= convertBoxInPixel(1, this._width);
-        drawRect(this._x, this._y, this._width, this._height);
+    move(active) {
+        switch (active) {
+            case 'l':
+            case 'left':
+                if (MapOptions.can('left', this._x, this._y)) {
+                    this._x--;
+                    return true;
+                }
+                return false;
+
+            case 'r':
+            case 'right':
+                if (MapOptions.can('right', this._x, this._y)) {
+                    this._x++;
+                    return true;
+                }
+                return false;
+            case 't':
+            case 'top':
+                if (MapOptions.can('top', this._x, this._y)) {
+                    this._y--;
+                    return true;
+                }
+                return false;
+            case 'b':
+            case 'bottom':
+                if (MapOptions.can('bottom', this._x, this._y)) {
+                    this._y++;
+                    return true;
+                }
+                return false;
+
+            default:
+                break;
+        }
     }
-
-    moveToBottom() {
-        clearRect(this._x, this._y, this._width, this._height);
-        this._y += convertBoxInPixel(1, this._width);
-        drawRect(this._x, this._y, this._width, this._height);
-    }
-}
-
-function clearRect(x, y, w, h) {
-    context.clearRect(x - 1, y - 1, w + 2, h + 2);
-}
-
-function drawRect(x, y, w, h) {
-    context.strokeRect(x, y, w, h);
-}
-
-function convertBoxInPixel(count, width) {
-    return count * width;
 }
