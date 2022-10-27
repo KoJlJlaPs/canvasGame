@@ -8,41 +8,30 @@ export class Main {
     constructor(blockSize) {
         this._blockSize = blockSize;
         this._draw = new Draw(blockSize);
-        this.enemies = [];
+        this._enemies = [];
         this._setEnemies();
     }
 
     setMainCharacter(x, y) {
         const mainCharacter = new Man(x, y);
-        this._draw.draw(x * this._blockSize, y * this._blockSize);
-        document.addEventListener('keydown', (e) => {
-            const startX = mainCharacter.x;
-            const startY = mainCharacter.y;
-            switch (e.key) {
-                case 'ArrowUp':
-                case 'w':
-                    mainCharacter.move('t');
-                    break;
-                case 'ArrowDown':
-                case 's':
-                    mainCharacter.move('b');
-                    break;
-                case 'ArrowRight':
-                case 'd':
-                    mainCharacter.move('r');
-                    break;
-                case 'ArrowLeft':
-                case 'a':
-                    mainCharacter.move('l');
-                    break;
+        this._drawCharacter(x, y, true);
 
-                default:
-                    break;
+        const attack = () => {
+            console.log('Attack');
+            const enemy = this._getCloseEnemy(mainCharacter.x, mainCharacter.y);
+            if (enemy && mainCharacter.attack(enemy)) {
+                console.log('Died');
+                this._clearCharacter(enemy.x, enemy.y);
+                map[enemy.y][enemy.x] = 1;
+                const index = this._enemies.findIndex(
+                    (value) => value.x === enemy.x && value.y === enemy.y,
+                );
+                this._enemies.splice(index, 1);
             }
-            const endX = mainCharacter.x;
-            const endY = mainCharacter.y;
-            if (startX !== endX || startY !== endY) this._drawCharacter(startX, startY, endX, endY);
-            this.enemies.forEach((el) => el.go(endX, endY));
+        };
+
+        document.addEventListener('keydown', (e) => {
+            this._keyDownFunction(attack, mainCharacter, e);
         });
 
         document.addEventListener('mouseup', (e) => {
@@ -50,113 +39,7 @@ export class Main {
             const x = Math.floor(e.offsetX / this._blockSize),
                 y = Math.floor(e.offsetY / this._blockSize);
 
-            if (!MapOptions.maybe(x, y)) return;
-
-            let fullPath = '';
-
-            function getPath(x1, y1, x2, y2, firstActive = null) {
-                let activeX, activeY;
-                if (x1 > x2) activeX = 'l';
-                else if (x1 < x2) activeX = 'r';
-                if (y1 > y2) activeY = 't';
-                else if (y1 < y2) activeY = 'b';
-
-                const dx = Math.abs(x1 - x2);
-                const dy = Math.abs(y1 - y2);
-                let path = [];
-
-                if (firstActive) {
-                    path[0] = firstActive;
-
-                    let i = 0;
-                    if (firstActive == 'l' || firstActive == 'r') i = 1;
-
-                    for (; i < dx; i++) {
-                        let rand = Math.floor(Math.random() * (dx + dy));
-                        while (path[rand]) rand = Math.floor(Math.random() * (dx + dy));
-                        path[rand] = activeX;
-                    }
-
-                    for (let i = 1; i < dx + dy; i++) if (!path[i]) path[i] = activeY;
-                    return path.join('');
-                }
-
-                for (let i = 0; i < dx; i++) {
-                    let rand = Math.floor(Math.random() * (dx + dy));
-                    while (path[rand]) rand = Math.floor(Math.random() * (dx + dy));
-                    path[rand] = activeX;
-                }
-
-                for (let i = 0; i < dx + dy; i++) if (!path[i]) path[i] = activeY;
-                return path.join('');
-            }
-
-            let path = getPath(mainCharacter.x, mainCharacter.y, x, y);
-
-            if (this._interval) clearInterval(this._interval);
-            let i = 0;
-            this._interval = setInterval(() => {
-                if (i == path.length) clearInterval(this._interval);
-                const startX = mainCharacter.x;
-                const startY = mainCharacter.y;
-                const result = mainCharacter.move(path[i]);
-                if (!result) {
-                    switch (path[i]) {
-                        case 'l':
-                            if (fullPath[fullPath.length - 1] != 'b' && mainCharacter.move('top')) {
-                                fullPath += 't';
-                            } else if (mainCharacter.move('bottom')) {
-                                fullPath += 'b';
-                            }
-                            break;
-                        case 'r':
-                            if (
-                                fullPath[fullPath.length - 1] != 't' &&
-                                mainCharacter.move('bottom')
-                            ) {
-                                fullPath += 'b';
-                            } else if (mainCharacter.move('top')) {
-                                fullPath += 't';
-                            }
-                            break;
-                        case 't':
-                            if (
-                                fullPath[fullPath.length - 1] != 'l' &&
-                                mainCharacter.move('right')
-                            ) {
-                                fullPath += 'r';
-                            } else if (mainCharacter.move('left')) {
-                                fullPath += 'l';
-                            }
-                            break;
-                        case 'b':
-                            if (
-                                fullPath[fullPath.length - 1] != 'r' &&
-                                mainCharacter.move('left')
-                            ) {
-                                fullPath += 'l';
-                            } else if (mainCharacter.move('right')) {
-                                fullPath += 'r';
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
-                    const endX = mainCharacter.x;
-                    const endY = mainCharacter.y;
-
-                    this._drawCharacter(startX, startY, endX, endY);
-                    path = getPath(endX, endY, x, y, path[i]);
-                    i = 0;
-                    return;
-                }
-                const endX = mainCharacter.x;
-                const endY = mainCharacter.y;
-                this._drawCharacter(startX, startY, endX, endY);
-                fullPath += path[i];
-                i++;
-            }, 250);
+            this._mouseUpFunction(x, y, attack, mainCharacter);
         });
     }
 
@@ -164,15 +47,84 @@ export class Main {
         map.forEach((element, i) => {
             element.forEach((el, j) => {
                 if (el == 2) {
-                    this._draw.draw(j * this._blockSize, i * this._blockSize);
-                    this.enemies.push(new Enemy(i, j));
+                    this._drawCharacter(j, i);
+                    this._enemies.push(
+                        new Enemy(i, j, this._clearCharacter.bind(this), this._enemies),
+                    );
                 }
             });
         });
     }
 
-    _drawCharacter(startX, startY, endX, endY) {
-        this._draw.clear(startX * this._blockSize, startY * this._blockSize);
-        this._draw.draw(endX * this._blockSize, endY * this._blockSize);
+    _moveCharacter(startX, startY, endX, endY) {
+        if (startX === endX && startY === endY) return;
+        // this._draw.clear(startX * this._blockSize, startY * this._blockSize);
+        // this._draw.drawImage(endX * this._blockSize, endY * this._blockSize, 'src/image/main');
+        return this._draw.move(
+            startX * this._blockSize,
+            endX * this._blockSize,
+            startY * this._blockSize,
+            endY * this._blockSize,
+        );
+    }
+
+    _drawCharacter(x, y, isMain) {
+        this._draw.drawImage(x * this._blockSize, y * this._blockSize, isMain);
+    }
+
+    _clearCharacter(x, y) {
+        this._draw.clear(x * this._blockSize, y * this._blockSize);
+    }
+
+    _getCloseEnemy(x, y) {
+        const rightEnemy = this._enemies.find((value) => value.x == x + 1 && value.y == y);
+        if (rightEnemy) return rightEnemy;
+        const leftEnemy = this._enemies.find((value) => value.x == x - 1 && value.y == y);
+        if (leftEnemy) return leftEnemy;
+    }
+
+    _keyDownFunction(attack, mainCharacter, e) {
+        const startX = mainCharacter.x;
+        const startY = mainCharacter.y;
+        switch (e.key) {
+            case 'ArrowUp':
+            case 'w':
+                mainCharacter.move('t');
+                break;
+            case 'ArrowDown':
+            case 's':
+                mainCharacter.move('b');
+                break;
+            case 'ArrowRight':
+            case 'd':
+                mainCharacter.move('r');
+                break;
+            case 'ArrowLeft':
+            case 'a':
+                mainCharacter.move('l');
+                break;
+            case 'e':
+                attack();
+            default:
+                break;
+        }
+        const endX = mainCharacter.x;
+        const endY = mainCharacter.y;
+        if ((startX !== endX || startY !== endY) && this._moveCharacter(startX, startY, endX, endY))
+            mainCharacter.cancelLastAction();
+    }
+
+    _mouseUpFunction(x, y, attack, mainCharacter) {
+        if (!MapOptions.maybe(x, y)) return;
+
+        if (MapOptions.maybe(x, y) == 2) {
+            if (mainCharacter.x <= x) {
+                if (mainCharacter.x !== x - 1 && mainCharacter.y !== y)
+                    mainCharacter.go(x - 1, y, this._moveCharacter.bind(this), attack.bind(this));
+                else {
+                    attack();
+                }
+            }
+        } else mainCharacter.go(x, y, this._moveCharacter.bind(this));
     }
 }
