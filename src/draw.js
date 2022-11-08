@@ -22,9 +22,10 @@ export class Draw {
     drawImage(x, y, src = null) {
         if (src === null) {
             this.draw(x, y, 'black');
+            return;
         }
         if (src === true) {
-            src = 'src/image/main.png';
+            src = './image/main.png';
         }
         const image = new Image(this._width, this._height);
         image.src = src;
@@ -39,7 +40,7 @@ export class Draw {
         let i = 1;
         const dx = x1 - x2;
         const dy = y1 - y2;
-        const startPath = 'src/image/maingo/';
+        const startPath = './image/maingo/';
         let action = () => {};
         if (dx < 0)
             action = () => {
@@ -63,12 +64,15 @@ export class Draw {
             };
 
         this._interval = setInterval(() => {
-            if (i === 8) {
+            if (i === 9) {
                 clearInterval(this._interval);
                 this._interval = null;
+                return;
             }
             this._context.fillRect(x1, y1, this._width, this._height);
-            action();
+            if (i === 8) {
+                this.drawImage(x2, y2, true);
+            } else action();
             i++;
         }, 500 / 8);
     }

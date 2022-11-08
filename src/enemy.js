@@ -5,6 +5,8 @@ export class Enemy {
         this._hp = 100;
         this._y = y;
         this._x = x;
+        this._el = document.getElementById('enemy');
+        this._el.textContent = this._hp;
     }
 
     get x() {
@@ -21,7 +23,7 @@ export class Enemy {
 
     takeDamage(man, damage) {
         this._hp -= damage;
-        console.log(this._hp);
+        this._el.textContent = this._hp;
         if (!this._interval)
             this._interval = setInterval(() => {
                 if (

@@ -5,6 +5,8 @@ export class Man {
         this._x = startX;
         this._y = startY;
         this._hp = 1000;
+        this._el = document.getElementById('you');
+        this._el.textContent = this._hp;
     }
 
     get x() {
@@ -100,7 +102,7 @@ export class Man {
 
     takeDamage(damage) {
         this._hp -= damage;
-        console.log(this._hp);
+        this._el.textContent = this._hp;
         if (this._hp <= 0) return true;
     }
 
