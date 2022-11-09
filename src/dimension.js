@@ -16,7 +16,7 @@ export class MapOptions {
         }
     }
 
-    static maybe(x, y) {
+    static result(x, y) {
         return map[y][x];
     }
 }

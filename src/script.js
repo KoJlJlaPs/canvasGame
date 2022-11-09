@@ -1,4 +1,4 @@
 import { Main } from './main';
-const main = new Main(100);
-
+const image = new Image();
+const main = new Main(100, image);
 main.setMainCharacter(4, 5);

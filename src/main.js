@@ -5,9 +5,9 @@ import { Man } from './man';
 import map from './data/map';
 
 export class Main {
-    constructor(blockSize) {
+    constructor(blockSize, image) {
         this._blockSize = blockSize;
-        this._draw = new Draw(blockSize);
+        this._draw = new Draw(image, blockSize);
         this._enemies = [];
         this._setEnemies();
     }
@@ -34,7 +34,7 @@ export class Main {
             this._keyDownFunction(attack, mainCharacter, e);
         });
 
-        document.addEventListener('mouseup', (e) => {
+        document.addEventListener('mousedown', (e) => {
             if (e.button != 0 || e.target.id !== 'game-field') return;
             const x = Math.floor(e.offsetX / this._blockSize),
                 y = Math.floor(e.offsetY / this._blockSize);
@@ -58,8 +58,6 @@ export class Main {
 
     _moveCharacter(startX, startY, endX, endY) {
         if (startX === endX && startY === endY) return;
-        // this._draw.clear(startX * this._blockSize, startY * this._blockSize);
-        // this._draw.drawImage(endX * this._blockSize, endY * this._blockSize, 'src/image/main');
         return this._draw.move(
             startX * this._blockSize,
             endX * this._blockSize,
@@ -86,6 +84,7 @@ export class Main {
     _keyDownFunction(attack, mainCharacter, e) {
         const startX = mainCharacter.x;
         const startY = mainCharacter.y;
+        console.log(e);
         switch (e.key) {
             case 'ArrowUp':
             case 'w':
@@ -115,15 +114,15 @@ export class Main {
     }
 
     _mouseUpFunction(x, y, attack, mainCharacter) {
-        if (!MapOptions.maybe(x, y)) return;
+        if (MapOptions.result(x, y) == 0) return;
 
-        if (MapOptions.maybe(x, y) == 2) {
-            if (mainCharacter.x <= x) {
-                if (mainCharacter.x !== x - 1 && mainCharacter.y !== y)
-                    mainCharacter.go(x - 1, y, this._moveCharacter.bind(this), attack.bind(this));
-                else {
-                    attack();
-                }
+        if (MapOptions.result(x, y) == 2) {
+            if (mainCharacter.x < x && mainCharacter.x !== x - 1 && mainCharacter.y !== y) {
+                mainCharacter.go(x - 1, y, this._moveCharacter.bind(this), attack.bind(this));
+            } else if (mainCharacter.x > x && mainCharacter.x !== x + 1 && mainCharacter.y !== y) {
+                mainCharacter.go(x + 1, y, this._moveCharacter.bind(this), attack.bind(this));
+            } else {
+                attack();
             }
         } else mainCharacter.go(x, y, this._moveCharacter.bind(this));
     }
