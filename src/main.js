@@ -1,13 +1,13 @@
-import { MapOptions } from './dimension';
+import { MapOptions } from './mapOptions';
 import { Draw } from './draw';
 import { Enemy } from './enemy';
 import { Man } from './man';
 import map from './data/map';
 
 export class Main {
-    constructor(blockSize, image) {
+    constructor(blockSize, images) {
         this._blockSize = blockSize;
-        this._draw = new Draw(image, blockSize);
+        this._draw = new Draw(images, blockSize);
         this._enemies = [];
         this._setEnemies();
     }
@@ -84,7 +84,6 @@ export class Main {
     _keyDownFunction(attack, mainCharacter, e) {
         const startX = mainCharacter.x;
         const startY = mainCharacter.y;
-        console.log(e);
         switch (e.key) {
             case 'ArrowUp':
             case 'w':

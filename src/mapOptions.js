@@ -1,6 +1,8 @@
-import map from './data/map';
+import { map, color } from './data/map';
 
+// Опции по карте на игре
 export class MapOptions {
+    // Проверка на возможность перемещения в точку
     static can(active, x, y) {
         switch (active) {
             case 'right':
@@ -16,7 +18,13 @@ export class MapOptions {
         }
     }
 
+    // Получить тип блока по координатам
     static result(x, y) {
         return map[y][x];
+    }
+
+    // Получить цвет по координатам
+    static color(x, y) {
+        return color[map[y][x]];
     }
 }

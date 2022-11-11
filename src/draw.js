@@ -27,7 +27,7 @@ export class Draw {
             return;
         }
         if (src === true) {
-            src = './image/main.png';
+            src = './image/main-image/main.png';
         }
         this._image.src = src;
         if (this._count == 0) {
@@ -93,7 +93,7 @@ export class Draw {
             },
         };
 
-        const startPath = './image/maingo/';
+        const startPath = './image/main-image/';
         let action;
         if (dx < 0) action = dimensions.right;
         else if (dx > 0) action = dimensions.left;

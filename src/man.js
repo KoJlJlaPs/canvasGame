@@ -1,4 +1,4 @@
-import { MapOptions } from './dimension';
+import { MapOptions } from './mapOptions';
 
 export class Man {
     constructor(startX = 7, startY = 5) {
