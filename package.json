@@ -7,9 +7,10 @@
     "build": "webpack",
     "prettier": "prettier --write src/**/*.js"
   },
-  "author": "",
+  "author": "Roman Makarov (RomanDMWB)",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.20.2",
     "babel-loader": "^8.2.5",
     "fs": "^0.0.1-security",
     "html-webpack-plugin": "^5.5.0",

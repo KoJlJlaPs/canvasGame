@@ -1,12 +1,11 @@
 import { MapOptions } from '../mapOptions';
-import { MoveOption } from './moveOption';
 
 // Класс Главного героя
 export class Hero {
-    constructor(hp, attack, x, y) {
+    constructor(hp, damage, x, y) {
         this._hp = hp;
         this._status = 'alive';
-        this._attack = attack;
+        this._damage = damage;
         this._x = x;
         this._y = y;
     }
@@ -19,6 +18,10 @@ export class Hero {
         return this._y;
     }
 
+    get hp() {
+        return this._hp;
+    }
+
     // Получение урона
     takeDamage(damage) {
         this._hp -= damage;
@@ -27,7 +30,7 @@ export class Hero {
 
     // Атака на врага
     attack(man) {
-        man.takeDamage(this._attack);
+        man.takeDamage(this._damage);
     }
 
     // Передвижение

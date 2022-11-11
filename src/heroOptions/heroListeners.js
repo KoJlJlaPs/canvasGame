@@ -1,7 +1,9 @@
 // Установление обработчиков нажатия клавиш
 export const setHeroEventListeners = (idName, hero, move) => {
+    let isClick = false;
     // Прослушивание нажатие на клавиш
     document.addEventListener('keydown', (e) => {
+        if (isClick) return;
         const startX = hero.x;
         const startY = hero.y;
         switch (e.key) {
@@ -33,7 +35,12 @@ export const setHeroEventListeners = (idName, hero, move) => {
         }
         const endX = hero.x;
         const endY = hero.y;
-        if (startX !== endX || startY !== endY) move(startX, startY, endX, endY);
+        if (startX !== endX || startY !== endY) {
+            isClick = true;
+            move(startX, startY, endX, endY, () => {
+                if (isClick) isClick = false;
+            });
+        }
     });
 
     // Прослушивание нажатие на левую кнопку мышки

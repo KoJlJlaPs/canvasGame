@@ -1,7 +1,5 @@
-let isDrawing = false;
 // Проведение анимационного перехода
-export function MoveOption(artist, x1, x2, y1, y2) {
-    if (isDrawing) return true;
+export function MoveOption(artist, x1, x2, y1, y2, func) {
     if (x1 == x2 && y1 == y2) return;
 
     const dx = x1 - x2;
@@ -11,7 +9,6 @@ export function MoveOption(artist, x1, x2, y1, y2) {
         right: {
             ac: (s) => {
                 x1 += s;
-                return { x1, y1 };
             },
             draw: (i) => artist.drawImage(x1, y1, 'right-' + i),
             diff: () => x2 - x1,
@@ -19,7 +16,6 @@ export function MoveOption(artist, x1, x2, y1, y2) {
         left: {
             ac: (s) => {
                 x1 -= s;
-                return { x1, y1 };
             },
             draw: (i) => artist.drawImage(x1, y1, 'left-' + i),
             diff: () => x1 - x2,
@@ -27,7 +23,6 @@ export function MoveOption(artist, x1, x2, y1, y2) {
         bottom: {
             ac: (s) => {
                 y1 += s;
-                return { x1, y1 };
             },
             draw: (i) => artist.drawImage(x1, y1, 'bottom-' + i),
             diff: () => y2 - y1,
@@ -35,7 +30,6 @@ export function MoveOption(artist, x1, x2, y1, y2) {
         top: {
             ac: (s) => {
                 y1 -= s;
-                return { x1, y1 };
             },
             draw: (i) => artist.drawImage(x1, y1, 'top-' + i),
             diff: () => y1 - y2,
@@ -49,12 +43,11 @@ export function MoveOption(artist, x1, x2, y1, y2) {
 
     let i = 1;
     let start;
-    isDrawing = true;
 
     // Прорисовка анимации
     const draw = (time) => {
         if (x1 == x2 && y1 == y2) {
-            isDrawing = false;
+            func();
             return;
         }
         if (start === undefined) start = time;
@@ -67,9 +60,7 @@ export function MoveOption(artist, x1, x2, y1, y2) {
         artist.clear(x1, y1);
 
         // Изменение координат
-        const coor = action.ac(stepWidth);
-        x1 = coor.x1;
-        y1 = coor.y1;
+        action.ac(stepWidth);
         // Получение номер кадра
         i = Math.trunc(((artist.w - action.diff()) * 7) / artist.w) + 1;
         // Отображение кадра на холсте
@@ -81,6 +72,3 @@ export function MoveOption(artist, x1, x2, y1, y2) {
 
     window.requestAnimationFrame(draw);
 }
-
-// Получение направление перемещения
-function getAction(x1, x2, y1, y2, artist) {}

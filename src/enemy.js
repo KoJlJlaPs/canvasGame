@@ -1,12 +1,13 @@
 import map from './data/map';
 
+// Класс противников
 export class Enemy {
-    constructor(y, x) {
-        this._hp = 100;
+    constructor(x, y, hp, damage) {
+        this._hp = hp;
         this._y = y;
         this._x = x;
-        this._el = document.getElementById('enemy');
-        this._el.textContent = this._hp;
+        this._damage = damage;
+        this._status = 'alive';
     }
 
     get x() {
@@ -17,13 +18,14 @@ export class Enemy {
         return this._y;
     }
 
+    // Получение количесество жизни противника
     get hp() {
         return this._hp;
     }
 
+    // Получение урона
     takeDamage(man, damage) {
         this._hp -= damage;
-        this._el.textContent = this._hp;
         if (!this._interval)
             this._interval = setInterval(() => {
                 if (
@@ -36,8 +38,13 @@ export class Enemy {
                     this._interval = null;
                     return;
                 }
-                man.takeDamage(10);
+                this.attack(man);
             }, 500);
-        if (this._hp <= 0) return true;
+        if (this._hp <= 0) this._status = 'died';
+    }
+
+    // Нанесение урона
+    attack(man) {
+        man.takeDamage(this._damage);
     }
 }

@@ -14,7 +14,7 @@ export class DrawOptions {
         // Прорисовка для начального изображения
         map.forEach((value, y) => {
             value.forEach((val, x) => {
-                this.clear(x, y);
+                this.clear(x * width, y * width);
             });
         });
     }
@@ -22,22 +22,16 @@ export class DrawOptions {
     // Заполнение цветом по координатам
     draw(x, y, color) {
         this._context.fillStyle = color;
-        this._context.fillRect(x * this.w, y * this.w, this.w, this.w);
+        this._context.fillRect(x, y, this.w, this.w);
     }
 
     // Рисование картины по координатам
     drawImage(x, y, name) {
-        this._context.drawImage(
-            this._images[name],
-            x * this.w + 1,
-            y * this.w + 1,
-            this.w - 1,
-            this.w - 1,
-        );
+        this._context.drawImage(this._images[name], x + 1, y + 1, this.w - 1, this.w - 1);
     }
 
     // Очищение по координатам
     clear(x, y) {
-        this.draw(x, y, MapOptions.color(x, y));
+        this.draw(x, y, MapOptions.color(Math.floor(x / this.w), Math.floor(y / this.w)));
     }
 }
