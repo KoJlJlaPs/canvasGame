@@ -34,18 +34,17 @@ export class Hero {
     }
 
     // Передвижение
-    move = {
-        left: (() => {
-            if (MapOptions.can('left', this._x, this._y)) this._x--;
-        }).bind(this),
-        right: (() => {
-            if (MapOptions.can('right', this._x, this._y)) this._x++;
-        }).bind(this),
-        top: (() => {
-            if (MapOptions.can('top', this._x, this._y)) this._y--;
-        }).bind(this),
-        bottom: (() => {
-            if (MapOptions.can('bottom', this._x, this._y)) this._y++;
-        }).bind(this),
-    };
+
+    left() {
+        if (MapOptions.can('left', this._x, this._y)) return this._x--;
+    }
+    right() {
+        if (MapOptions.can('right', this._x, this._y)) return this._x++;
+    }
+    top() {
+        if (MapOptions.can('top', this._x, this._y)) return this._y--;
+    }
+    bottom() {
+        if (MapOptions.can('bottom', this._x, this._y)) return this._y++;
+    }
 }
