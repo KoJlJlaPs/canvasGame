@@ -1,10 +1,3 @@
-// import { Main } from './main';
-// window.onload = () => {
-//     const images = document.querySelectorAll('img');
-//     const main = new Main(100, images);
-//     main.setMainCharacter(4, 5);
-// };
-
 import { Game } from './game';
 
 window.onload = () => {
