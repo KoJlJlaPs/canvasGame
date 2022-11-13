@@ -10,6 +10,7 @@ export class Hero {
         this._y = y;
     }
 
+    // Получение координат
     get x() {
         return this._x;
     }
@@ -18,8 +19,14 @@ export class Hero {
         return this._y;
     }
 
+    // Получение количество жизней главного героя
     get hp() {
         return this._hp;
+    }
+
+    // Получение статуса главного героя
+    get status() {
+        return this._status;
     }
 
     // Получение урона

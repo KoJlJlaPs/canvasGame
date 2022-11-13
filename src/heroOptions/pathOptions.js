@@ -1,4 +1,4 @@
-export function moveOnPath(hero, move, x2, y2) {
+export function moveOnPath(hero, move, x2, y2, lastFunction) {
     if (hero.x === x2 && hero.y == y2) return;
 
     let path = getPath(hero.x, hero.y, x2, y2);
@@ -11,7 +11,10 @@ export function moveOnPath(hero, move, x2, y2) {
     function moving(hero, x, y) {
         if (hero.x !== x || hero.y !== y) {
             move(x, y, hero.x, hero.y, () => {
-                if (path.length == i) return;
+                if (path.length == i) {
+                    lastFunction();
+                    return;
+                }
                 const startX = hero.x,
                     startY = hero.y;
                 if (setMove(hero, path[i])) {

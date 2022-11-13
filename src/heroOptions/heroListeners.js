@@ -2,11 +2,12 @@ import { MapOptions } from '../mapOptions';
 import { moveOnPath } from './pathOptions';
 
 // Установление обработчиков нажатия клавиш
-export const setHeroEventListeners = (idName, hero, move, size) => {
-    let isClick = false;
+export const setHeroEventListeners = (idName, hero, move, attack, size) => {
+    let isKeyDown = false,
+        isMouseClick = false;
     // Прослушивание нажатие на клавиш
     document.addEventListener('keydown', (e) => {
-        if (isClick) return;
+        if (isKeyDown) return;
         const startX = hero.x;
         const startY = hero.y;
         switch (e.key) {
@@ -39,9 +40,9 @@ export const setHeroEventListeners = (idName, hero, move, size) => {
         const endX = hero.x;
         const endY = hero.y;
         if (startX !== endX || startY !== endY) {
-            isClick = true;
+            isKeyDown = true;
             move(startX, startY, endX, endY, () => {
-                if (isClick) isClick = false;
+                if (isKeyDown) isKeyDown = false;
             });
         }
     });
@@ -52,16 +53,23 @@ export const setHeroEventListeners = (idName, hero, move, size) => {
         const x = Math.floor(e.offsetX / size),
             y = Math.floor(e.offsetY / size);
 
+        const go = (x, y, func = null) => {
+            moveOnPath(hero, move, x, y, () => {
+                if (isMouseClick) isMouseClick = false;
+                if (func) func();
+            });
+        };
+
         if (MapOptions.result(x, y) == 0) return;
 
         if (MapOptions.result(x, y) == 2) {
-            // if (hero.x < x && hero.x !== x - 1 && hero.y !== y) {
-            //     hero.go(x - 1, y, this._moveCharacter.bind(this), attack.bind(this));
-            // } else if (hero.x > x && hero.x !== x + 1 && hero.y !== y) {
-            //     hero.go(x + 1, y, this._moveCharacter.bind(this), attack.bind(this));
-            // } else {
-            //     attack();
-            // }
-        } else moveOnPath(hero, move, x, y);
+            if (hero.x < x - 1 || (hero.x === x - 1 && hero.y !== y)) {
+                go(x - 1, y, attack);
+            } else if (hero.x > x + 1 || (hero.x === x + 1 && hero.y !== y)) {
+                go(x + 1, y, attack);
+            } else {
+                attack();
+            }
+        } else go(x, y);
     });
 };

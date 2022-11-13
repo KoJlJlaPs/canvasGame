@@ -1,15 +1,17 @@
-import map from './data/map';
+import map from '../data/map';
 
 // Класс противников
 export class Enemy {
-    constructor(x, y, hp, damage) {
+    constructor(x, y, hp, damage, time = 500) {
         this._hp = hp;
         this._y = y;
         this._x = x;
         this._damage = damage;
         this._status = 'alive';
+        this._time = time;
     }
 
+    // Получение координат
     get x() {
         return this._x;
     }
@@ -23,23 +25,19 @@ export class Enemy {
         return this._hp;
     }
 
+    //Время на паузу при атаке
+    get time() {
+        return this._time;
+    }
+
+    // Получить статус персонажа
+    get status() {
+        return this._status;
+    }
+
     // Получение урона
-    takeDamage(man, damage) {
+    takeDamage(damage) {
         this._hp -= damage;
-        if (!this._interval)
-            this._interval = setInterval(() => {
-                if (
-                    (man.x + 1 !== this._x && man.x - 1 !== this._x) ||
-                    man.y !== this._y ||
-                    man.hp === 0 ||
-                    this._hp === 0
-                ) {
-                    clearInterval(this._interval);
-                    this._interval = null;
-                    return;
-                }
-                this.attack(man);
-            }, 500);
         if (this._hp <= 0) this._status = 'died';
     }
 

@@ -1,4 +1,5 @@
 import { DrawOptions } from './drawOptions';
+import { Enemies as EnemiesOption } from './enemy/enemiesOption';
 import { Hero } from './heroOptions/hero';
 import { setHeroEventListeners } from './heroOptions/heroListeners';
 import { MoveOption } from './heroOptions/moveOption';
@@ -9,6 +10,7 @@ export class Game {
         this._size = blockSize;
         this._idName = idName;
         this._artist = new DrawOptions(blockSize, idName, images);
+        this._enemiesOption = new EnemiesOption();
     }
 
     //Добавление главного игрока
@@ -26,6 +28,9 @@ export class Game {
                     y2 * this._size,
                     f,
                 );
+            },
+            () => {
+                this._enemiesOption.takeDamage(this._hero);
             },
             this._size,
         );
