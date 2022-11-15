@@ -1,3 +1,7 @@
 /node_modules
-/public/app.js
-package-lock.json
+public/app.js
+public/*.html
+!public/local.html
+.firebaserc
+firebase.json
+/.firebase
