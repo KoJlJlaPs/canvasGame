@@ -1,5 +1,5 @@
 import { MapOptions } from '../mapOptions';
-import { moveOnPath } from './pathOptions';
+import { moveOnPath } from './pathOption';
 
 // Установление обработчиков нажатия клавиш
 export const setHeroEventListeners = (idName, hero, move, attack, size) => {
@@ -59,6 +59,8 @@ export const setHeroEventListeners = (idName, hero, move, attack, size) => {
                 if (func) func();
             });
         };
+
+        console.log(MapOptions.result(x, y));
 
         if (MapOptions.result(x, y) == 0) return;
 

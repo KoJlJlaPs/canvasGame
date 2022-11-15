@@ -1,3 +1,5 @@
+import { drawAnimate } from './animateOption';
+
 // Проведение анимационного перехода
 export function MoveOption(artist, x1, x2, y1, y2, func) {
     if (x1 == x2 && y1 == y2) return;
@@ -35,25 +37,18 @@ export function MoveOption(artist, x1, x2, y1, y2, func) {
             diff: () => y1 - y2,
         },
     };
-    let action;
+    let action,
+        i = 1;
     if (dx < 0) action = dimensions.right;
     else if (dx > 0) action = dimensions.left;
     else if (dy < 0) action = dimensions.bottom;
     else action = dimensions.top;
 
-    let i = 1;
-    let start;
-
     // Прорисовка анимации
-    const draw = (time) => {
-        if (x1 == x2 && y1 == y2) {
-            func();
-            return;
-        }
-        if (start === undefined) start = time;
-
+    drawAnimate((diff) => {
+        if (x1 == x2 && y1 == y2) return true;
         // Получение длину перехода
-        const periodWidth = Math.round(((time - start) * artist.w) / 500);
+        const periodWidth = Math.round((diff * artist.w) / 500);
         let stepWidth = Math.min(periodWidth, action.diff());
 
         //Очищение территории на холсте по координатам
@@ -65,10 +60,6 @@ export function MoveOption(artist, x1, x2, y1, y2, func) {
         i = Math.trunc(((artist.w - action.diff()) * 7) / artist.w) + 1;
         // Отображение кадра на холсте
         action.draw(i);
-
-        start = time;
-        window.requestAnimationFrame(draw);
-    };
-
-    window.requestAnimationFrame(draw);
+        return false;
+    }, func);
 }

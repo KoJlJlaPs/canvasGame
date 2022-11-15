@@ -2,14 +2,25 @@ export function moveOnPath(hero, move, x2, y2, lastFunction) {
     if (hero.x === x2 && hero.y == y2) return;
 
     let path = getPath(hero.x, hero.y, x2, y2);
-    let i = 1;
+    let i = 0;
 
     const setMove = (hero, action) => {
         return hero[getMove(action)]();
     };
 
-    function moving(hero, x, y) {
-        if (hero.x !== x || hero.y !== y) {
+    function moving(hero, x = null, y = null) {
+        if (!x && !y) {
+            const startX = hero.x,
+                startY = hero.y;
+            if (setMove(hero, path[i])) {
+                i++;
+                moving(hero, startX, startY);
+            } else {
+                i++;
+                path = [goOnReserveActive(path, i, hero), getPath(hero.x, hero.y, x2, y2)];
+                moving(hero, startX, startY);
+            }
+        } else if (hero.x !== x || hero.y !== y) {
             move(x, y, hero.x, hero.y, () => {
                 if (path.length == i) {
                     lastFunction();
@@ -28,17 +39,11 @@ export function moveOnPath(hero, move, x2, y2, lastFunction) {
             });
         }
     }
-
-    const startX = hero.x,
-        startY = hero.y;
-    if (setMove(hero, path[0])) moving(hero, startX, startY);
-    else {
-        path = [goOnReserveActive(path, i, hero), getPath(hero.x, hero.y, x2, y2)];
-        moving(hero, startX, startY);
-    }
+    moving(hero);
 }
 
 function getMove(action) {
+    if (!action) debugger;
     if (action.x == undefined || action.x == 0) {
         if (action.y > 0) return 'bottom';
         else return 'top';
