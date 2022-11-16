@@ -60,8 +60,6 @@ export const setHeroEventListeners = (idName, hero, move, attack, size) => {
             });
         };
 
-        console.log(MapOptions.result(x, y));
-
         if (MapOptions.result(x, y) == 0) return;
 
         if (MapOptions.result(x, y) == 2) {
