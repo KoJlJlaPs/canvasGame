@@ -6,14 +6,11 @@ export class Enemies {
         this._draw = draw;
         this._enemies = [];
         this._intervals = [];
-        map.forEach((row, i) => {
+        map.forEach((row, i) =>
             row.forEach((val, j) => {
-                if (val == 2) {
-                    this._enemies.push(new Enemy(j, i, 100, 10));
-                    draw(j, i, 'blue');
-                }
-            });
-        });
+                if (val == 2) this._enemies.push(new Enemy(j, i, 100, 10));
+            }),
+        );
     }
 
     // Получение урона от главного героя

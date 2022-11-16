@@ -2,7 +2,10 @@ import { MapOptions } from '../mapOptions';
 import { moveOnPath } from './pathOption';
 
 // Установление обработчиков нажатия клавиш
-export const setHeroEventListeners = (idName, hero, move, attack, size) => {
+export const setHeroEventListeners = (idName, hero, moveFunction, attack, size, artist) => {
+    const move = (x1, y1, x2, y2, f) => {
+        moveFunction(artist, x1 * size, x2 * size, y1 * size, y2 * size, f);
+    };
     let isKeyDown = false,
         isMouseClick = false;
     // Прослушивание нажатие на клавиш
@@ -50,8 +53,8 @@ export const setHeroEventListeners = (idName, hero, move, attack, size) => {
     // Прослушивание нажатие на левую кнопку мышки
     document.addEventListener('mousedown', (e) => {
         if (e.button != 0 || e.target.id !== idName) return;
-        const x = Math.floor(e.offsetX / size),
-            y = Math.floor(e.offsetY / size);
+        const x = Math.floor(e.offsetX / size) - artist.diff.x,
+            y = Math.floor(e.offsetY / size) - artist.diff.y;
 
         const go = (x, y, func = null) => {
             moveOnPath(hero, move, x, y, () => {
