@@ -3,6 +3,7 @@ import { Enemy } from './enemy';
 
 export class Enemies {
     constructor(draw) {
+        this._draw = draw;
         this._enemies = [];
         this._intervals = [];
         map.forEach((row, i) => {
@@ -28,6 +29,7 @@ export class Enemies {
         if (enemy.status == 'died') {
             this._enemies.splice(i, 1);
             map[enemy.y][enemy.x] = 1;
+            this._draw(enemy.x, enemy.y);
             return;
         }
         hero.attack(enemy);

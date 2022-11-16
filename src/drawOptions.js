@@ -14,24 +14,20 @@ export class DrawOptions {
         // Прорисовка для начального изображения
         map.forEach((value, y) => {
             value.forEach((val, x) => {
-                this.clear(x * width, y * width);
+                this.draw(x * width, y * width);
             });
         });
     }
 
     // Заполнение цветом по координатам
-    draw(x, y, color) {
+    draw(x, y, color = MapOptions.color(Math.floor(x / this.w), Math.floor(y / this.w))) {
         this._context.fillStyle = color;
+        console.log(x, y);
         this._context.fillRect(x, y, this.w, this.w);
     }
 
     // Рисование картины по координатам
     drawImage(x, y, name) {
         this._context.drawImage(this._images[name], x + 1, y + 1, this.w - 1, this.w - 1);
-    }
-
-    // Очищение по координатам
-    clear(x, y) {
-        this.draw(x, y, MapOptions.color(Math.floor(x / this.w), Math.floor(y / this.w)));
     }
 }

@@ -52,7 +52,7 @@ export function MoveOption(artist, x1, x2, y1, y2, func) {
         let stepWidth = Math.min(periodWidth, action.diff());
 
         //Очищение территории на холсте по координатам
-        artist.clear(x1, y1);
+        artist.draw(x1, y1);
 
         // Изменение координат
         action.ac(stepWidth);
