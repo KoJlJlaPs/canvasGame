@@ -14,7 +14,6 @@ export class Hero {
     get x() {
         return this._x;
     }
-
     get y() {
         return this._y;
     }
@@ -41,7 +40,6 @@ export class Hero {
     }
 
     // Передвижение
-
     left() {
         if (MapOptions.can('left', this._x, this._y)) return this._x--;
     }

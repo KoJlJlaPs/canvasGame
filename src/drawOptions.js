@@ -19,8 +19,8 @@ export class DrawOptions {
         };
         // Все картинки используемые в игре
         this._images = images;
-        this._drawMap();
         // Прорисовка для начального изображения
+        this._drawMap();
     }
 
     get w() {

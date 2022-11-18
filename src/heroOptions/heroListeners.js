@@ -1,13 +1,9 @@
-import { MapOptions } from '../mapOptions';
-import { moveOnPath } from './pathOption';
-
 // Установление обработчиков нажатия клавиш
-export const setHeroEventListeners = (idName, hero, moveFunction, attack, size, artist) => {
+export const setHeroEventListeners = (hero, moveFunction, attack, size, artist, idName) => {
     const move = (x1, y1, x2, y2, f) => {
         moveFunction(artist, x1 * size, x2 * size, y1 * size, y2 * size, f);
     };
-    let isKeyDown = false,
-        isMouseClick = false;
+    let isKeyDown = false;
     // Прослушивание нажатие на клавиш
     document.addEventListener('keydown', (e) => {
         if (isKeyDown) return;
@@ -50,29 +46,7 @@ export const setHeroEventListeners = (idName, hero, moveFunction, attack, size, 
         }
     });
 
-    // Прослушивание нажатие на левую кнопку мышки
-    document.addEventListener('mousedown', (e) => {
-        if (e.button != 0 || e.target.id !== idName) return;
-        const x = Math.floor(e.offsetX / size) - artist.diff.x,
-            y = Math.floor(e.offsetY / size) - artist.diff.y;
-
-        const go = (x, y, func = null) => {
-            moveOnPath(hero, move, x, y, () => {
-                if (isMouseClick) isMouseClick = false;
-                if (func) func();
-            });
-        };
-
-        if (MapOptions.result(x, y) == 0) return;
-
-        if (MapOptions.result(x, y) == 2) {
-            if (hero.x < x - 1 || (hero.x === x - 1 && hero.y !== y)) {
-                go(x - 1, y, attack);
-            } else if (hero.x > x + 1 || (hero.x === x + 1 && hero.y !== y)) {
-                go(x + 1, y, attack);
-            } else {
-                attack();
-            }
-        } else go(x, y);
+    document.addEventListener('touchmove', (e) => {
+        if (e.target.id !== idName) return;
     });
 };

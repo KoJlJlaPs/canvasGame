@@ -22,7 +22,6 @@ export class Game {
         this._hero = new Hero(1000, 10, x, y);
         this._animateEnd = true;
         setHeroEventListeners(
-            this._idName,
             this._hero,
             MoveOption,
             () => {
@@ -42,6 +41,7 @@ export class Game {
         const cardCount = 6;
         let time = 0;
         let i = 1;
+        // Рисование анимации атаки
         drawAnimate(
             (diff) => {
                 let cadrNumber = Math.round(((cardCount - 1) * time) / heroAttackTime) + 1;

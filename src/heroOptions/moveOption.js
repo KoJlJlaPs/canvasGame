@@ -50,10 +50,8 @@ export function MoveOption(artist, x1, x2, y1, y2, func) {
         // Получение длину перехода
         const periodWidth = Math.round((diff * artist.w) / 500);
         let stepWidth = Math.min(periodWidth, action.diff());
-
         //Очищение территории на холсте по координатам
         artist.draw(x1, y1);
-
         // Изменение координат
         action.ac(stepWidth);
         // Получение номер кадра
