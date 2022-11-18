@@ -17,5 +17,5 @@ module.exports = {
         ],
     },
     plugins: [new HTMLWebpackPlugin()],
-    mode: 'development',
+    mode: 'production',
 };

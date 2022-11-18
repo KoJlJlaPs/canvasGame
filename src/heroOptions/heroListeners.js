@@ -1,5 +1,7 @@
+import { TouchMove } from './touchOption';
+
 // Установление обработчиков нажатия клавиш
-export const setHeroEventListeners = (hero, moveFunction, attack, size, artist, idName) => {
+export const setHeroEventListeners = (hero, moveFunction, attack, size, artist) => {
     const move = (x1, y1, x2, y2, f) => {
         moveFunction(artist, x1 * size, x2 * size, y1 * size, y2 * size, f);
     };
@@ -46,7 +48,12 @@ export const setHeroEventListeners = (hero, moveFunction, attack, size, artist, 
         }
     });
 
+    // Добавление функции перемещения персонажа на телефоне
+    const touch = new TouchMove(hero, move);
     document.addEventListener('touchmove', (e) => {
-        if (e.target.id !== idName) return;
+        const x = e.touches.item(0).clientX,
+            y = e.touches.item(0).clientY;
+        touch.setValues(x, y);
+        touch.move();
     });
 };
