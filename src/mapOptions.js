@@ -25,7 +25,6 @@ export class MapOptions {
 
     // Получить цвет по координатам
     static color(x, y) {
-        if (map[y][x] == undefined) return 'white';
         return color[map[y][x]];
     }
 }

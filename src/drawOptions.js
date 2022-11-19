@@ -3,15 +3,15 @@ import { MapOptions } from './mapOptions';
 
 // Опции по рисованию на холсте
 export class DrawOptions {
-    constructor(width, idName, images) {
+    constructor(blockLength, idName, images) {
         // Размер блока
-        this._w = width;
+        this._w = blockLength;
         // Холст
         const canvas = document.getElementById(idName);
         this._context = canvas.getContext('2d');
         // Количество блоков по горизонтале и по вертикале
-        this._xCount = canvas.clientWidth / width;
-        this._yCount = canvas.clientHeight / width;
+        this._xCount = canvas.clientWidth / blockLength;
+        this._yCount = canvas.clientHeight / blockLength;
         // Изменения окна
         this._diff = {
             x: 0,
@@ -79,6 +79,8 @@ export class DrawOptions {
 
     // Рисование карты
     _drawMap() {
+        this._context.fillStyle = 'white';
+        this._context.fillRect(0, 0, this._xCount * this._w, this._w * this._yCount);
         map.forEach((value, y) => {
             value.forEach((val, x) => {
                 if (

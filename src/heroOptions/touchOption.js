@@ -30,7 +30,11 @@ export class TouchMove {
 
         if (startX != endX || startY != endY) {
             this._isMove = true;
-            this._move(startX, startY, endX, endY, () => {this._isMove = false;this._coordinate = [];});
+            this._move(startX, startY, endX, endY, () => {
+                this._isMove = false;
+                this._coordinate = [];
+            });
         }
+        this._coordinate = [];
     }
 }
