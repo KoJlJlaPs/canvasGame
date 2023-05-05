@@ -47,7 +47,7 @@ export function MoveOption(artist, x1, x2, y1, y2, func) {
     // Прорисовка анимации
     drawAnimate((diff) => {
         if (x1 == x2 && y1 == y2) return true;
-        // Получение длину перехода
+        // Получение длины перехода
         const periodWidth = Math.round((diff * artist.w) / 500);
         let stepWidth = Math.min(periodWidth, action.diff());
         //Очищение территории на холсте по координатам

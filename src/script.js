@@ -1,37 +1,46 @@
+/*
+    Начало программы
+*/
+
 import { Game } from './game';
 
 const height = window.innerHeight;
 const width = window.innerWidth;
-let blockSize = 100;
+let blockSize;
 console.log(height, width);
 const canvas = document.getElementById('game-field');
+
+//  Проверка на устройство
+//  Если мобильное то использовать малый масштаб карты и картинок
 if (/Android|iPhone/i.test(navigator.userAgent)) {
     blockSize = 80;
     if (width > height) {
-        canvas.width = 640;
-        canvas.height = 320;
+        canvas.width = 8 * blockSize;
+        canvas.height = 4 * blockSize;
     } else {
-        canvas.width = 320;
-        canvas.height = 640;
+        canvas.width = 4 * blockSize;
+        canvas.height = 8 * blockSize;
     }
-}
-else{
-    canvas.width = 800;
-    canvas.height = 800;
+} else {
+    blockSize = 80;
+    canvas.width = 8 * blockSize;
+    canvas.height = 8 * blockSize;
 }
 
+//  Проверка на ориентацию устройства
 window.onorientationchange = () => {
     const height = window.innerHeight;
     const width = window.innerWidth;
     if (width > height) {
-        canvas.width = 640;
-        canvas.height = 320;
+        canvas.width = 8 * blockSize;
+        canvas.height = 4 * blockSize;
     } else {
-        canvas.width = 320;
-        canvas.height = 640;
+        canvas.width = 4 * blockSize;
+        canvas.height = 8 * blockSize;
     }
-}
+};
 
+//  Загрузка игры
 window.onload = () => {
     const images = {};
     document.querySelectorAll('img').forEach((image) => {

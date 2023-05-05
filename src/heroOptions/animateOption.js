@@ -1,4 +1,4 @@
-// Функция прорисовки анимации
+// Функция прорисовки анимации персонажа
 export function drawAnimate(func, lastFunction = null) {
     let start;
     // Проведение функции при каждой итерации
