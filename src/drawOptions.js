@@ -5,7 +5,7 @@ import { MapOptions } from './mapOptions';
 export class DrawOptions {
     constructor(blockLength, idName, images) {
         // Размер блока
-        this._w = blockLength;
+        this._width = blockLength;
         // Холст
         const canvas = document.getElementById(idName);
         this._context = canvas.getContext('2d');
@@ -24,35 +24,48 @@ export class DrawOptions {
     }
 
     get w() {
-        return this._w;
+        return this._width;
     }
 
     // Заполнение цветом по координатам
     draw(x, y, color = null) {
-        if (!color) color = MapOptions.color(Math.floor(x / this._w), Math.floor(y / this._w));
+        if (!color)
+            color = MapOptions.color(Math.floor(x / this._width), Math.floor(y / this._width));
         this._context.fillStyle = color;
         this._context.fillRect(
-            x + this._diff.x * this._w,
-            y + this._diff.y * this._w,
-            this._w,
-            this._w,
+            x + this._diff.x * this._width,
+            y + this._diff.y * this._width,
+            this._width,
+            this._width,
         );
+        //  Рандомные темные точки
+        const newColor = this._makeColorDarker(color, 10);
+        this._context.fillStyle = this._makeColorDarker(color, 10);
+        const pixelSize = this._width / 16;
+        for (let i = 0; i < this._width / 8; i++) 
+            this._context.fillRect(
+                x + this._diff.x * this._width + Math.random() * (this._width + 1 - pixelSize),
+                y + this._diff.y * this._width + Math.random() * (this._width + 1 - pixelSize),
+                pixelSize,
+                pixelSize,
+            );
     }
 
     // Рисование картины по координатам
     drawImage(x, y, name) {
-        if (y + this._diff.y * this._w == this._w * this._yCount) this._moveGameWindow('bottom');
-        else if (y + this._diff.y * this._w < 0) this._moveGameWindow('top');
-        else if (x + this._diff.x * this._w == this._w * this._xCount)
+        if (y + this._diff.y * this._width == this._width * this._yCount)
+            this._moveGameWindow('bottom');
+        else if (y + this._diff.y * this._width < 0) this._moveGameWindow('top');
+        else if (x + this._diff.x * this._width == this._width * this._xCount)
             this._moveGameWindow('right');
-        else if (x + this._diff.x * this._w < 0) this._moveGameWindow('left');
+        else if (x + this._diff.x * this._width < 0) this._moveGameWindow('left');
 
         this._context.drawImage(
             this._images[name],
-            x + this._diff.x * this._w,
-            y + this._diff.y * this._w,
-            this._w,
-            this._w,
+            x + this._diff.x * this._width,
+            y + this._diff.y * this._width,
+            this._width,
+            this._width,
         );
     }
 
@@ -80,7 +93,7 @@ export class DrawOptions {
     // Рисование карты
     _drawMap() {
         this._context.fillStyle = 'white';
-        this._context.fillRect(0, 0, this._xCount * this._w, this._w * this._yCount);
+        this._context.fillRect(0, 0, this._xCount * this._width, this._width * this._yCount);
         map.forEach((value, y) => {
             value.forEach((val, x) => {
                 if (
@@ -89,9 +102,49 @@ export class DrawOptions {
                     Math.abs(this._diff.y) <= y &&
                     y < this._yCount - this._diff.y
                 ) {
-                    this.draw(x * this._w, y * this._w);
+                    this.draw(x * this._width, y * this._width);
                 }
             });
         });
+    }
+
+    //  Затемнение цвета
+    _makeColorDarker(color, value) {
+        const HEX_VALUE = [
+            '0',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            'a',
+            'b',
+            'c',
+            'd',
+            'e',
+            'f',
+        ];
+        color = color.toLowerCase();
+        const convertHexToDec = (char) => HEX_VALUE.findIndex((hex)=>hex==char);
+        let redValue, greenValue, blueValue;
+        redValue = convertHexToDec(color[1]) * 16 + convertHexToDec(color[2]);
+        greenValue = convertHexToDec(color[3]) * 16 + convertHexToDec(color[4]);
+        blueValue = convertHexToDec(color[5]) * 16 + convertHexToDec(color[6]);
+        redValue = redValue - value < 0 ? 0 : redValue - value;
+        greenValue = greenValue - value < 0 ? 0 : greenValue - value;
+        blueValue = blueValue - value < 0 ? 0 : blueValue - value;
+        return (
+            '#' +
+            HEX_VALUE[Math.floor(redValue / 16)] +
+            HEX_VALUE[redValue % 16] +
+            HEX_VALUE[Math.floor(greenValue / 16)] +
+            HEX_VALUE[greenValue % 16] +
+            HEX_VALUE[Math.floor(blueValue / 16)] +
+            HEX_VALUE[blueValue % 16]
+        );
     }
 }

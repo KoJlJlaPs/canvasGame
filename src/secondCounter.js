@@ -1,4 +1,4 @@
-class SecondCounter {
+export default class {
     constructor() {
         this._time = 0;
     }
@@ -15,7 +15,3 @@ class SecondCounter {
         return this._time === 0 ? 0 : Date.now() - this._time;
     }
 }
-
-const seconder = new SecondCounter();
-
-export default seconder;

@@ -1,5 +1,5 @@
 import { TouchMove } from './touchOption';
-import seconder from '../secondCounter';
+import SecondCounter from '../secondCounter';
 
 const START_MOVE_STATE = 1;
 const END_MOVE_STATE = 2;
@@ -7,6 +7,7 @@ const MIN_TIME_FOR_CONTINUOSLY_MS = 100;
 
 // Установление обработчиков нажатия клавиш
 export const setHeroEventListeners = (hero, moveFunction, attack, size, artist) => {
+    const seconder = new SecondCounter();
     const move = (x1, y1, x2, y2, f) => {
         moveFunction(artist, x1 * size, x2 * size, y1 * size, y2 * size, f);
     };
