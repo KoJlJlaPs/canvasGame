@@ -1,9 +1,6 @@
 import { TouchMove } from './touchOption';
 import SecondCounter from '../secondCounter';
-
-const START_MOVE_STATE = 1;
-const END_MOVE_STATE = 2;
-const MIN_TIME_FOR_CONTINUOSLY_MS = 100;
+import config from '../config';
 
 // Установление обработчиков нажатия клавиш
 export const setHeroEventListeners = (hero, moveFunction, attack, size, artist) => {
@@ -31,26 +28,26 @@ export const setHeroEventListeners = (hero, moveFunction, attack, size, artist) 
         switch (e.key) {
             // Вверх
             case 'ArrowUp':
-            case 'w':
+            case config.MAIN_CHARACTER.MOVE_KEY.TOP:
                 hero.top();
                 break;
             // Вниз
             case 'ArrowDown':
-            case 's':
+            case config.MAIN_CHARACTER.MOVE_KEY.BOTTOM:
                 hero.bottom();
                 break;
             // Вправо
             case 'ArrowRight':
-            case 'd':
+            case config.MAIN_CHARACTER.MOVE_KEY.RIGHT:
                 hero.right();
                 break;
             // Влево
             case 'ArrowLeft':
-            case 'a':
+            case config.MAIN_CHARACTER.MOVE_KEY.LEFT:
                 hero.left();
                 break;
             // Атака
-            case 'e':
+            case config.MAIN_CHARACTER.ATTACK.KEY:
                 attack();
             default:
                 break;
@@ -66,10 +63,14 @@ export const setHeroEventListeners = (hero, moveFunction, attack, size, artist) 
                 seconder.start();
 
                 continuoslyInterval = setInterval(() => {
-                    if (seconder.getTime() > MIN_TIME_FOR_CONTINUOSLY_MS && !isStopDrawImage) {
+                    if (
+                        seconder.getTime() > config.MAIN_CHARACTER.MIN_TIME_FOR_CONTINUOSLY_MS &&
+                        !isStopDrawImage
+                    ) {
                         artist.draw(hero.x * size, hero.y * size);
-                        artist.drawImage(hero.x * size, hero.y * size, 'bottom-1');
+                        artist.drawImage(hero.x * size, hero.y * size, 'main');
                         isStopDrawImage = true;
+                        clearInterval(continuoslyInterval);
                     }
                 }, 10);
             });
