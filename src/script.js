@@ -4,27 +4,26 @@
 
 import { Game } from './game';
 
-const height = window.innerHeight;
-const width = window.innerWidth;
-let blockSize;
-console.log(height, width);
-const canvas = document.getElementById('game-field');
+// Константы для игры
+const WINDOW_HEIGHT = window.innerHeight;
+const WINDOW_WIDTH = window.innerWidth;
+const CANVAS_ID_NAME = 'game-field';
+const BLOCK_SIZE = 80;
+const CANVAS_ELEMENT = document.getElementById(CANVAS_ID_NAME);
 
 //  Проверка на устройство
 //  Если мобильное то использовать малый масштаб карты и картинок
 if (/Android|iPhone/i.test(navigator.userAgent)) {
-    blockSize = 80;
-    if (width > height) {
-        canvas.width = 8 * blockSize;
-        canvas.height = 4 * blockSize;
+    if (WINDOW_WIDTH > WINDOW_HEIGHT) {
+        CANVAS_ELEMENT.width = 8 * BLOCK_SIZE;
+        CANVAS_ELEMENT.height = 4 * BLOCK_SIZE;
     } else {
-        canvas.width = 4 * blockSize;
-        canvas.height = 8 * blockSize;
+        CANVAS_ELEMENT.width = 4 * BLOCK_SIZE;
+        CANVAS_ELEMENT.height = 8 * BLOCK_SIZE;
     }
 } else {
-    blockSize = 80;
-    canvas.width = 8 * blockSize;
-    canvas.height = 8 * blockSize;
+    CANVAS_ELEMENT.width = 8 * BLOCK_SIZE;
+    CANVAS_ELEMENT.height = 8 * BLOCK_SIZE;
 }
 
 //  Проверка на ориентацию устройства
@@ -32,11 +31,11 @@ window.onorientationchange = () => {
     const height = window.innerHeight;
     const width = window.innerWidth;
     if (width > height) {
-        canvas.width = 8 * blockSize;
-        canvas.height = 4 * blockSize;
+        CANVAS_ELEMENT.width = 8 * BLOCK_SIZE;
+        CANVAS_ELEMENT.height = 4 * BLOCK_SIZE;
     } else {
-        canvas.width = 4 * blockSize;
-        canvas.height = 8 * blockSize;
+        CANVAS_ELEMENT.width = 4 * BLOCK_SIZE;
+        CANVAS_ELEMENT.height = 8 * BLOCK_SIZE;
     }
 };
 
@@ -46,6 +45,6 @@ window.onload = () => {
     document.querySelectorAll('img').forEach((image) => {
         images[image.id] = image;
     });
-    const game = new Game(blockSize, 'game-field', images);
+    const game = new Game(BLOCK_SIZE, CANVAS_ELEMENT, images);
     game.setMainHero(4, 5);
 };

@@ -10,6 +10,7 @@ export default {
         //  Клавиша атаки
         ATTACK: {
             KEY: 'e',
+            CLICK: '',
         },
         //  Минимальное время бездействия персонажа
         MIN_TIME_FOR_CONTINUOSLY_MS: 100,

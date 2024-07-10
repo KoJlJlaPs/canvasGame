@@ -77,6 +77,13 @@ export const setHeroEventListeners = (hero, moveFunction, attack, size, artist) 
         }
     });
 
+    // Добавление прослушивание событие клика мыши
+    document.getElementById('game-field').addEventListener('mousedown', (e) => {
+        if (e.button != 0) return;
+        // Атака персонажа на близкого врага
+        attack({ x: e.clientX, y: e.clientY });
+    });
+
     // Добавление функции перемещения персонажа на телефоне
     const touch = new TouchMove(hero, move);
     document.addEventListener('touchmove', (e) => {

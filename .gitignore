@@ -6,3 +6,4 @@ public/*.html
 firebase.json
 .firebase/
 package-lock.json
+.idea
