@@ -1,16 +1,13 @@
-import { map } from '../data/map';
-import { Enemy } from './enemy';
+import place from '../map/mapOptions';
+import { map, g } from '../map/mapConfig';
+const { getEnemyCoordinates } = place;
 
-export class Enemies {
+export class EnemiesOptions {
     constructor(draw) {
         this._draw = draw;
         this._enemies = [];
         this._intervals = [];
-        map.forEach((row, i) =>
-            row.forEach((val, j) => {
-                if (val == 2) this._enemies.push(new Enemy(j, i, 100, 10));
-            }),
-        );
+        this._enemies = getEnemyCoordinates();
     }
 
     // Получение урона от главного героя
@@ -25,12 +22,12 @@ export class Enemies {
         const enemy = this._enemies[i];
         if (enemy.status == 'died') {
             this._enemies.splice(i, 1);
-            map[enemy.y][enemy.x] = 1;
+            map[enemy.y][enemy.x] = g;
             this._draw(enemy.x, enemy.y);
             return;
         }
         hero.attack(enemy);
-        console.log('Hero attack!');
+        console.log('Hero attack!', enemy.hp);
         if (this._intervals[i]) return;
         this._intervals[i] = setInterval(() => {
             if (
@@ -45,7 +42,7 @@ export class Enemies {
                 return;
             }
             enemy.attack(hero);
-            console.log('Enemy attack!');
+            console.log('Enemy attack!', hero.hp);
         }, enemy.time);
     }
 

@@ -1,8 +1,7 @@
-import { map } from './data/map';
-import { MapOptions } from './mapOptions';
-
-const HEX_VALUE = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
-
+import { map } from './map/mapConfig';
+import MapOptions from './map/mapOptions';
+import config from './config';
+const { CONVERT_HEX_TO_DEC, CONVERT_DEC_TO_HEX } = config;
 // Опции по рисованию на холсте
 export class DrawOptions {
     constructor(blockLength, canvasElement, images) {
@@ -40,6 +39,7 @@ export class DrawOptions {
             this._width,
             this._width,
         );
+        if (MapOptions.isEnemy(Math.floor(x / this._width), Math.floor(y / this._width))) return;
         //  Рандомные темные точки
         this._context.fillStyle = this._makeColorDarker(color, 10);
         const pixelSize = this._width / 16;
@@ -121,44 +121,36 @@ export class DrawOptions {
     //  Затемнение цвета
     _makeColorDarker(color, value) {
         color = color.toLowerCase();
-        const convertHexToDec = (char) => HEX_VALUE.findIndex((hex) => hex == char);
         let redValue, greenValue, blueValue;
-        redValue = convertHexToDec(color[1]) * 16 + convertHexToDec(color[2]);
-        greenValue = convertHexToDec(color[3]) * 16 + convertHexToDec(color[4]);
-        blueValue = convertHexToDec(color[5]) * 16 + convertHexToDec(color[6]);
+        redValue = CONVERT_HEX_TO_DEC(color[1]) * 16 + CONVERT_HEX_TO_DEC(color[2]);
+        greenValue = CONVERT_HEX_TO_DEC(color[3]) * 16 + CONVERT_HEX_TO_DEC(color[4]);
+        blueValue = CONVERT_HEX_TO_DEC(color[5]) * 16 + CONVERT_HEX_TO_DEC(color[6]);
         redValue = redValue - value < 0 ? 0 : redValue - value;
         greenValue = greenValue - value < 0 ? 0 : greenValue - value;
         blueValue = blueValue - value < 0 ? 0 : blueValue - value;
         return (
             '#' +
-            HEX_VALUE[Math.floor(redValue / 16)] +
-            HEX_VALUE[redValue % 16] +
-            HEX_VALUE[Math.floor(greenValue / 16)] +
-            HEX_VALUE[greenValue % 16] +
-            HEX_VALUE[Math.floor(blueValue / 16)] +
-            HEX_VALUE[blueValue % 16]
+            CONVERT_DEC_TO_HEX(redValue) +
+            CONVERT_DEC_TO_HEX(greenValue) +
+            CONVERT_DEC_TO_HEX(blueValue)
         );
     }
 
     //  Засветление цвета
     _makeColorLighter(color, value) {
         color = color.toLowerCase();
-        const convertHexToDec = (char) => HEX_VALUE.findIndex((hex) => hex == char);
         let redValue, greenValue, blueValue;
-        redValue = convertHexToDec(color[1]) * 16 + convertHexToDec(color[2]);
-        greenValue = convertHexToDec(color[3]) * 16 + convertHexToDec(color[4]);
-        blueValue = convertHexToDec(color[5]) * 16 + convertHexToDec(color[6]);
+        redValue = CONVERT_HEX_TO_DEC(color[1]) * 16 + CONVERT_HEX_TO_DEC(color[2]);
+        greenValue = CONVERT_HEX_TO_DEC(color[3]) * 16 + CONVERT_HEX_TO_DEC(color[4]);
+        blueValue = CONVERT_HEX_TO_DEC(color[5]) * 16 + CONVERT_HEX_TO_DEC(color[6]);
         redValue = redValue - value > 255 ? 255 : redValue + value;
         greenValue = greenValue - value > 255 ? 255 : greenValue + value;
         blueValue = blueValue - value > 255 ? 255 : blueValue + value;
         return (
             '#' +
-            HEX_VALUE[Math.floor(redValue / 16)] +
-            HEX_VALUE[redValue % 16] +
-            HEX_VALUE[Math.floor(greenValue / 16)] +
-            HEX_VALUE[greenValue % 16] +
-            HEX_VALUE[Math.floor(blueValue / 16)] +
-            HEX_VALUE[blueValue % 16]
+            CONVERT_DEC_TO_HEX(redValue) +
+            CONVERT_DEC_TO_HEX(greenValue) +
+            CONVERT_DEC_TO_HEX(blueValue)
         );
     }
 }

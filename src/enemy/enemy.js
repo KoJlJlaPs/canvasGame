@@ -1,5 +1,3 @@
-import map from '../data/map';
-
 // Класс противников
 export class Enemy {
     constructor(x, y, hp, damage, time = 500) {

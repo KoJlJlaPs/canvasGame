@@ -1,5 +1,4 @@
-import { MapOptions } from '../mapOptions';
-
+import MapOptions from '../map/mapOptions';
 // Класс Главного героя
 export class Hero {
     constructor(hp, damage, x, y) {

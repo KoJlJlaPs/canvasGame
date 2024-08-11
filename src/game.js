@@ -1,10 +1,9 @@
 import { DrawOptions } from './drawOptions';
-import { Enemies as EnemiesOption } from './enemy/enemiesOption';
+import { EnemiesOptions } from './enemy/enemiesOption';
 import { drawAnimate } from './heroOptions/animateOption';
 import { Hero } from './heroOptions/hero';
 import { setHeroEventListeners } from './heroOptions/heroListeners';
 import { MoveOption } from './heroOptions/moveOption';
-import { CANVAS_ELEMENT_ID, BLOCK_SIZE } from './config';
 
 // Класс Логики Игры
 export class Game {
@@ -12,9 +11,13 @@ export class Game {
         this._size = blockSize;
         this._canvasElement = canvasElement;
         this._artist = new DrawOptions(blockSize, canvasElement, images);
-        // Добавление врагов
-        this._enemiesOption = new EnemiesOption((x, y, color) =>
-            this._artist.draw(x * this._size, y * this._size, color),
+        this.setEnemies();
+    }
+
+    // Доабавление врагов в игру
+    setEnemies() {
+        this._enemiesOption = new EnemiesOptions(
+            ((x, y, color) => this._artist.draw(x * this._size, y * this._size, color)).bind(this),
         );
     }
 

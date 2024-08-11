@@ -26,7 +26,7 @@ if (/Android|iPhone/i.test(navigator.userAgent)) {
     CANVAS_ELEMENT.height = 8 * BLOCK_SIZE;
 }
 
-//  Проверка на ориентацию устройства
+//  Проверка на ориентацию мобильного устройства
 window.onorientationchange = () => {
     const height = window.innerHeight;
     const width = window.innerWidth;
