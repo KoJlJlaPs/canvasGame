@@ -62,10 +62,8 @@ export const setHeroEventListeners = (hero, moveFunction, attack, size, artist) 
             isKeyDown = true;
             move(startX, startY, endX, endY, () => {
                 if (isKeyDown) isKeyDown = false;
-
                 //  Запуск секундомера для начала замера бездействия
                 seconder.start();
-
                 continuoslyInterval = setInterval(() => {
                     if (
                         seconder.getTime() > config.MAIN_CHARACTER.MIN_TIME_FOR_CONTINUOSLY_MS &&
