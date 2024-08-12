@@ -1,12 +1,12 @@
 // Класс противников
 export class Enemy {
-    constructor(x, y, hp, damage, time = 500) {
+    constructor(x, y, hp, damage, time = 5) {
         this._hp = hp;
         this._y = y;
         this._x = x;
         this._damage = damage;
         this._status = 'alive';
-        this._time = time;
+        this._time = time*100;
     }
 
     // Получение координат

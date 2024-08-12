@@ -28,7 +28,16 @@ function getEnemyCoordinates() {
     const enemies = [];
     map.forEach((row, i) =>
         row.forEach((val, j) => {
-            if (isEnemy(j, i)) enemies.push(new Enemy(j, i, 100, 10));
+            if (isEnemy(j, i)) {
+                const value = map[i][j]
+                const {hp,time,damage} = {
+                    hp:(value>>16)&0xff,
+                    time:(value>>8)&0xff,
+                    damage:value&0xff,
+                }
+                console.log(hp,damage,time,value)
+                enemies.push(new Enemy(j, i, hp, damage,time));
+            }
         }),
     );
     return enemies;

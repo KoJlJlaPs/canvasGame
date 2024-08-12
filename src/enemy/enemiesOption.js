@@ -1,6 +1,6 @@
-import place from '../map/mapOptions';
+import oprtions from '../map/mapOptions';
 import { map, g } from '../map/mapConfig';
-const { getEnemyCoordinates } = place;
+const { getEnemyCoordinates } = oprtions;
 
 export class EnemiesOptions {
     constructor(draw) {
@@ -12,24 +12,20 @@ export class EnemiesOptions {
 
     // Получение урона от главного героя
     takeDamage(hero) {
-        const x1 = hero.x + 1,
-            x2 = hero.x - 1,
-            y = hero.y;
-        const i = this._enemies.findIndex(
-            (value) => (value.x === x1 || value.x === x2) && value.y === y,
-        );
-        if (i == -1) return;
+        let i;
+        if ((i=this.getSameEnemy(hero.x,hero.y))==-1) return;
         const enemy = this._enemies[i];
+        hero.attack(enemy);
         if (enemy.status == 'died') {
             this._enemies.splice(i, 1);
             map[enemy.y][enemy.x] = g;
             this._draw(enemy.x, enemy.y);
             return;
         }
-        hero.attack(enemy);
         console.log('Hero attack!', enemy.hp);
         if (this._intervals[i]) return;
         this._intervals[i] = setInterval(() => {
+            enemy.attack(hero);
             if (
                 hero.status === 'died' ||
                 enemy.x - 1 > hero.x ||
@@ -41,14 +37,13 @@ export class EnemiesOptions {
                 this._intervals[i] = undefined;
                 return;
             }
-            enemy.attack(hero);
             console.log('Enemy attack!', hero.hp);
         }, enemy.time);
     }
 
     getSameEnemy(x, y) {
-        return this._enemies.find((value) => {
-            if ((value.x + 1 == x || value.x - 1 == x) && value.y == y) return true;
+        return this._enemies.findIndex((value) => {
+            if (((value.x + 1) == x || (value.x - 1) == x) && value.y == y) return true;
         });
     }
 }

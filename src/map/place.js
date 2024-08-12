@@ -26,8 +26,9 @@ const addPlace = (typeName, placeName, props) => {
         }
     placeData |= typeNumber << 24;
     if (typeIndex == 2) {
-        const { xp, damage } = props;
-        placeData |= xp << 10;
+        const { hp, damage, time } = props;
+        placeData |= hp << 16;
+        placeData |= time << 8;
         placeData |= damage;
     } else {
         const { color } = props;

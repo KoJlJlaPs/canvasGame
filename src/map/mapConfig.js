@@ -15,8 +15,8 @@ const c = addPlace(PLACE_TYPES[1], 'wheat', { color: 0xffd700 });
 const w = addPlace(PLACE_TYPES[0], 'wall', { color: 0xa2653e });
 const a = addPlace(PLACE_TYPES[0], 'aqua', { color: 0x4682b4 });
 // Враги
-const s = addPlace(PLACE_TYPES[2], 'small', { xp: 100, damage: 10 });
-const m = addPlace(PLACE_TYPES[2], 'medium', { xp: 200, damage: 20 });
+const s = addPlace(PLACE_TYPES[2], 'small', { hp: 100, damage: 10, time: 5 });
+const m = addPlace(PLACE_TYPES[2], 'medium', { hp: 200, damage: 20, time: 10 });
 const map = [
     [g, g, g, g, g, g, g, g, g, g, g, g, g, g, g, g],
     [w, w, w, g, g, g, g, g, g, g, g, g, g, g, g, g],
