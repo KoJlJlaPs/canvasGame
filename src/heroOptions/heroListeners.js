@@ -29,26 +29,30 @@ export const setHeroEventListeners = (hero, moveFunction, attack, size, artist) 
             // Вверх
             case 'ArrowUp':
             case config.MAIN_CHARACTER.MOVE_KEY.TOP:
-                hero.top();
+                if (hero.top() == undefined) artist.drawImage(hero.x * size, hero.y * size, 'main');
                 break;
             // Вниз
             case 'ArrowDown':
             case config.MAIN_CHARACTER.MOVE_KEY.BOTTOM:
-                hero.bottom();
+                if (hero.bottom() == undefined)
+                    artist.drawImage(hero.x * size, hero.y * size, 'main');
                 break;
             // Вправо
             case 'ArrowRight':
             case config.MAIN_CHARACTER.MOVE_KEY.RIGHT:
-                hero.right();
+                if (hero.right() == undefined)
+                    artist.drawImage(hero.x * size, hero.y * size, 'main');
                 break;
             // Влево
             case 'ArrowLeft':
             case config.MAIN_CHARACTER.MOVE_KEY.LEFT:
-                hero.left();
+                if (hero.left() == undefined)
+                    artist.drawImage(hero.x * size, hero.y * size, 'main');
                 break;
             // Атака
             case config.MAIN_CHARACTER.ATTACK.KEY:
                 attack();
+                return;
             default:
                 break;
         }
@@ -81,7 +85,7 @@ export const setHeroEventListeners = (hero, moveFunction, attack, size, artist) 
     document.getElementById('game-field').addEventListener('mousedown', (e) => {
         if (e.button != 0) return;
         // Атака персонажа на близкого врага
-        attack({ x: e.clientX, y: e.clientY });
+        attack({ x: e.layerX, y: e.layerY });
     });
 
     // Добавление функции перемещения персонажа на телефоне

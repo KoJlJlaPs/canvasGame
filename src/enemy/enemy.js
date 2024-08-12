@@ -6,7 +6,7 @@ export class Enemy {
         this._x = x;
         this._damage = damage;
         this._status = 'alive';
-        this._time = time*100;
+        this._time = time * 100;
     }
 
     // Получение координат

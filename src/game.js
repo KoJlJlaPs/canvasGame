@@ -31,7 +31,32 @@ export class Game {
             MoveOption,
             (position = undefined) => {
                 if (!this._animateEnd) return;
-                this._heroAttackAnimate(position);
+                // Поиск рядом врага
+                let sameEnemy = this._enemiesOption.getSameEnemy(this._hero.x, this._hero.y);
+                if (!sameEnemy) return;
+
+                // Проверка места клика мыши
+                if (position) {
+                    // Позиция врага по координатам
+                    const EP = {
+                        startX: sameEnemy.x * this._size,
+                        startY: sameEnemy.y * this._size,
+                        endX: (sameEnemy.x + 1) * this._size,
+                        endY: (sameEnemy.y + 1) * this._size,
+                    };
+                    console.log(position, EP);
+                    // Проверка нажатия на врага мышкой
+                    if (
+                        !(
+                            position.x > EP.startX &&
+                            position.x < EP.endX &&
+                            position.y > EP.startY &&
+                            position.y < EP.endY
+                        )
+                    )
+                        return;
+                }
+                this._heroAttackAnimate(sameEnemy.x - 1 == this._hero.x ? 'right' : 'left');
                 this._animateEnd = false;
             },
             this._size,
@@ -42,8 +67,8 @@ export class Game {
     }
 
     // Анимация атаки главного героя
-    _heroAttackAnimate(clickPosition) {
-        const heroAttackTime = 250;
+    _heroAttackAnimate(direction) {
+        const heroAttackTime = 100;
         const cardCount = 6;
         let time = 0;
         let i = 1;
@@ -53,35 +78,8 @@ export class Game {
                 let cadrNumber = Math.round(((cardCount - 1) * time) / heroAttackTime) + 1;
                 if (time == heroAttackTime) return true;
                 time += Math.min(heroAttackTime - time, diff);
-
                 if (i == cadrNumber) return false;
                 i = cadrNumber;
-
-                // Поиск рядом врага
-                let sameEnemy = this._enemiesOption.getSameEnemy(this._hero.x, this._hero.y);
-                if (!sameEnemy) return;
-                // Проверка места клика мыши
-                if (clickPosition) {
-                    // Позиция врага по координатам
-                    const EP = {
-                        startX: sameEnemy.x * this._size,
-                        startY: sameEnemy.y * this._size,
-                        endX: (sameEnemy.x + 1) * this._size,
-                        endY: (sameEnemy.y + 1) * this._size,
-                    };
-                    // Проверка нажатия на врага мышкой
-                    if (
-                        !(
-                            clickPosition.x > EP.startX &&
-                            clickPosition.x < EP.endX &&
-                            clickPosition.y > EP.startY &&
-                            clickPosition.y < EP.endY
-                        )
-                    )
-                        return;
-                }
-                // Получение направления атаки
-                let direction = sameEnemy.x - 1 == this._hero.x ? 'right' : 'left';
                 let x = this._hero.x * this._size,
                     y = this._hero.y * this._size;
                 this._artist.draw(x, y);

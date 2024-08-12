@@ -8,7 +8,6 @@ export function drawAnimate(func, lastFunction = null) {
             if (lastFunction) lastFunction();
             return;
         }
-
         start = time;
         window.requestAnimationFrame(animate);
     };

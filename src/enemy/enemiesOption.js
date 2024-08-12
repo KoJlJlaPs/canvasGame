@@ -13,7 +13,7 @@ export class EnemiesOptions {
     // Получение урона от главного героя
     takeDamage(hero) {
         let i;
-        if ((i=this.getSameEnemy(hero.x,hero.y))==-1) return;
+        if ((i = this._getSameEnemyIndex(hero.x, hero.y)) == -1) return;
         const enemy = this._enemies[i];
         hero.attack(enemy);
         if (enemy.status == 'died') {
@@ -42,8 +42,12 @@ export class EnemiesOptions {
     }
 
     getSameEnemy(x, y) {
+        return this._enemies[this._getSameEnemyIndex(x, y)];
+    }
+
+    _getSameEnemyIndex(x, y) {
         return this._enemies.findIndex((value) => {
-            if (((value.x + 1) == x || (value.x - 1) == x) && value.y == y) return true;
+            if ((value.x + 1 == x || value.x - 1 == x) && value.y == y) return true;
         });
     }
 }
