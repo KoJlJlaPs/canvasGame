@@ -30,41 +30,43 @@ export class DrawOptions {
 
     // Заполнение цветом по координатам
     draw(x, y, color = null) {
-        if(x%this._width!=0||y%this._width!=0){
-            let color1,color2;
-            const xdec = x%this._width;
-            const ydec = y%this._width;
-            if(ydec==0){
-                color1 = MapOptions.color((x-xdec)/this._width, y/this._width);
-                color2 = MapOptions.color((x+this._width-xdec)/this._width, y/this._width);
+        if (x % this._width != 0 || y % this._width != 0) {
+            let color1, color2;
+            const xdec = x % this._width;
+            const ydec = y % this._width;
+            if (ydec == 0) {
+                color1 = MapOptions.color((x - xdec) / this._width, y / this._width);
+                color2 = MapOptions.color((x + this._width - xdec) / this._width, y / this._width);
                 this._context.fillStyle = color1;
                 this._context.fillRect(
-                    x - xdec + this._diff.x * this._width,
+                    x + this._diff.x * this._width,
                     y + this._diff.y * this._width,
-                    xdec,this._width,
+                    this._width - xdec,
+                    this._width,
+                );
+                this._context.fillStyle = color2;
+                this._context.fillRect(
+                    x - xdec + (this._diff.x + 1) * this._width,
+                    y + this._diff.y * this._width,
+                    xdec,
+                    this._width,
+                );
+            } else {
+                color1 = MapOptions.color(x / this._width, (y - ydec) / this._width);
+                color2 = MapOptions.color(x / this._width, (y + this._width - ydec) / this._width);
+                this._context.fillStyle = color1;
+                this._context.fillRect(
+                    x + this._diff.x * this._width,
+                    y + this._diff.y * this._width,
+                    this._width,
+                    this._width - ydec,
                 );
                 this._context.fillStyle = color2;
                 this._context.fillRect(
                     x + this._diff.x * this._width,
-                    y + this._diff.y * this._width,
-                    this._width-xdec,this._width,
-                );
-            }else{
-                color1 = MapOptions.color(x/this._width, (y-ydec)/this._width);
-                color2 = MapOptions.color(x/this._width, (y+this._width-ydec)/this._width);
-                this._context.fillStyle = color1;
-                this._context.fillRect(
-                    x + this._diff.x * this._width,
-                    y - ydec + this._diff.y * this._width,
+                    y - ydec + (this._diff.y + 1) * this._width,
                     this._width,
                     ydec,
-                );
-                this._context.fillStyle = color2;
-                this._context.fillRect(
-                    x + this._diff.x * this._width,
-                    y + this._diff.y * this._width,
-                    this._width,
-                    this._width-ydec,
                 );
             }
             return;
